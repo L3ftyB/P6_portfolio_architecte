@@ -1,41 +1,46 @@
-// Le tableau pour récupérer les photos et les categories depuis l'API
-//On recupere nos photos et nos differentes categories en les mettant sous forme de tableaux.
+//La page index.js permet l'administration du portfolio de l'architecte en communiquant avec l'API.
+
+// Les tableaux pour récupérer les photos et les categories depuis l'API
+//On initialise les tableaux pour stocker les photos et les categories recuperées.
 let photos = [];
 
 let categories = [];
 
-//On recupere les photos dans l'API, la fonction afficherPortfolio est ensuite executé.
+//Recuperation des photos depuis l'API, puis execution de la fonction afficherPortfolio une fois les données recuperées.
 fetch("http://localhost:5678/api/works")
 .then(reponse => reponse.json())
     .then(data => {
         console.log(data)
         photos = data
+        // Une fois les photos récupérées, on appelle la fonction afficherPortfolio pour les afficher dans la page web.
          afficherPortfolio()
         
     }) 
 
-//On fait interagir la fonction afficherCategories, qui permet d'avoir les differentes categories dans le formulaire prealablement stockés dans le serveur
+// Recuperation des catégories depuis l' API, puis execution de la fonction afficherCategories une fois les données récuperées.
  fetch('http://localhost:5678/api/categories') 
  .then(reponse => reponse.json())
     .then(data => {
         console.log(data)
         categories = data
+        // Une fois les categories récupérées, on appelle la fonction afficherCategories pour les lister dans le formulaire.
         afficherCategories()
-        //gestion affichage des filtres
-        const filtersContainer = document.getElementById('filters-container'); // On recupere l'element qui contiendra les boutons de filtre dans la page web. 
+
+        //gestion d' affichage des filtres.
+        const filtersContainer = document.getElementById('filters-container'); // Recuperer l'element qui contiendra les boutons de filtre dans la page web. 
         categories.forEach( categorie => {
-          const button = document.createElement('button'); // Une balise button pour chaque categories
-          button.textContent = categorie.name; // On fait correspondre le texte dans chaque button au noms des categories
-          button.id = categorie.id // On associe les ids des categories aux button
-          button.addEventListener('click', (event) => { // On associe l'evenement sur chaque button. 
-            filterProjets(event.target.id)  // la fonction filterProjets s'execute lorsque l'on clique sur les buttons
+          const button = document.createElement('button'); // Creer une balise button pour chaque categories.
+          button.textContent = categorie.name; // Faire correspondre le texte dans chaque button au noms des categories.
+          button.id = categorie.id // Associer les ids des categories aux button
+          button.addEventListener('click', (event) => { // Associer l'evenement click sur chaque button. 
+            filterProjets(event.target.id)  // La fonction filterProjets est executée lorsque l'on clique sur les boutons.
           });
           filtersContainer.appendChild(button);
         });
-        // On cree un bouton 'Tous' qui permettra d'afficher toute les photos
-        const buttonTous = document.createElement('button');
+        
+        const buttonTous = document.createElement('button'); // Creer un bouton 'Tous' qui permettra d'afficher toute les photos sans filtrage.
         buttonTous.textContent = "Tous";
-        buttonTous.addEventListener('click', () => { // On associe un evenement au click sur le bouton 'Tous' ce qui execute la fonction afficherPortfolio
+        buttonTous.addEventListener('click', () => { // Associer un evenement au click sur le bouton 'Tous' qui execute la fonction afficherPortfolio
           afficherPortfolio()
         });
         filtersContainer.appendChild(buttonTous);
@@ -44,15 +49,15 @@ fetch("http://localhost:5678/api/works")
 
         const filterButtons = document.querySelectorAll('#filters-container button');
         filterButtons.forEach(button => {
-          button.addEventListener('click', event => {   // les proprietes CSS sont modifiés au click de chaque button
-            filterButtons.forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+          button.addEventListener('click', event => {   // les proprietes CSS sont modifiés au click de chaque button pour indiquer l'etat actif ou non.
+            filterButtons.forEach(b => b.classList.remove('active')); // On retire la classe active pour tous les boutons de filtre.
+            event.target.classList.add('active'); // Ajouter la classe active au bouton qui a été cliqué.
           });
         });
 
     });
    
-    //Afficher les differentes categores associés à leurs id en modifiant le DOM dans le html
+    // La fonction afficherCategories permet l'affichage des differentes catégories associées à leurs Id en modifiant le DOM dans le html.
     function afficherCategories () {
       for (let i = 0; i < categories.length; i++) {
         const categorie = categories[i];
@@ -66,7 +71,7 @@ fetch("http://localhost:5678/api/works")
    
 
 
-const photoModal = document.getElementById("photoModal"); // On recupere la modale dans lequel le container photos sera present
+const photoModal = document.getElementById("photoModal"); // On recupere la modale dans lequel le container photos sera present.
 const closeButton = document.querySelector(".close");
 const uploadButton = document.getElementById("uploadButton");
 const photoContainer = document.getElementById("photoContainer");
