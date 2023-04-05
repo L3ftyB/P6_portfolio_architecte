@@ -620,3 +620,11 @@ footer nav ul {
 	
    
 }
+
+ .errorUpload{
+	display: none;
+	color: red;
+	margin: auto;
+	margin-top: 25px;
+	
+ }

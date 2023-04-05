@@ -187,6 +187,8 @@ const uploadModal = document.getElementById("uploadModal");
 const uploadForm = document.getElementById("uploadForm");
 const uploadCloseButton = document.querySelector("#uploadModal .close");
 
+
+
 uploadButton.addEventListener("click", function () {  // Cliquer sur le bouton "Ajouter une photo" dans la 1ère modale fera apparaitre la 2nde toute en faisant disparaitre la 1ère
   photoModal.style.display = "none";
   uploadModal.style.display = "block";
@@ -196,6 +198,7 @@ uploadCloseButton.addEventListener("click", function () {  // On associe un even
   uploadModal.style.display = "none";
 });
 
+const errorUpload = document.querySelector('.errorUpload');
 
 uploadForm.addEventListener("submit", function (event) { // On associe un evenement de type submit dans le formulaire pour upload les photos.
   event.preventDefault();  // preventDefault empeche l'execution par defaut de l'evenement en soit, ce qui evite le chargement de la page.
@@ -203,6 +206,12 @@ uploadForm.addEventListener("submit", function (event) { // On associe un evenem
   const photoName = document.getElementById("photoName").value;  // Nom des photos à recuperer.
   const photoCategory = document.getElementById("photoCategory").value; // categories des photos à recuperer.
   const photoFile = document.getElementById("input-file").files[0]; // bouton de chargement des photos à ajouter.
+  
+  if (!photoName || !photoCategory) { 
+    errorUpload.innerText = "Vous devez entrer un titre et choisir une catégorie pour la photo.";
+    errorUpload.style.display = "block";
+    return;
+  }
   
   
   const data = new FormData();  // On ajoute les données du formulaire en tant que paire clé/value.
@@ -222,7 +231,8 @@ uploadForm.addEventListener("submit", function (event) { // On associe un evenem
       .then(data => {
           console.log(data)
           photos.push(data)  // les photos soumises sont ajoutées via un push() dans notre tableau 'photos'.
-
+          
+          
           uploadModal.style.display = "none"   // La modale se ferme apres que l'on ai effectué l'upload.
           //On modifie le DOM en ajoutant dynamiquement les nouvelles images avec leurs titres.
           photoContainerPortfolio.innerHTML += ` 
@@ -233,6 +243,12 @@ uploadForm.addEventListener("submit", function (event) { // On associe un evenem
           `
    
         })
+
+        .catch(error => {
+          console.error(error);
+          
+          errorUpload.style.display = "block";
+        });  
 
       
 });

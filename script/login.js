@@ -12,7 +12,6 @@ let submit = document.getElementById('submit');
 let errorMessage = document.querySelector(".errorLogin");
 
 
-
 submit.onclick = (event) => {
     event.preventDefault(),
   
